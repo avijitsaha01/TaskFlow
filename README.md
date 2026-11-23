@@ -1,5 +1,7 @@
 # TaskFlow
 
+[Live website](https://taskflows.free.nf/)
+
 TaskFlow is a Laravel application for managing personal tasks. Each account has a private dashboard with a searchable task list, a monthly calendar, and upcoming deadlines.
 
 ## Requirements
@@ -12,18 +14,19 @@ Laravel serves the JavaScript and CSS from `public/`. The local setup uses PHP a
 
 ## Run locally
 
-1. Start the database server. Open phpMyAdmin and create a database named `taskflow` using the `utf8mb4_unicode_ci` collation.
-2. Choose how to populate it. For a demo, select the empty `taskflow` database in phpMyAdmin, then use **Import** to load `database.sql`. For a blank app, leave the database empty and let Laravel create the tables.
-3. Make a local `.env` from `.env.example` and update the database credentials if they differ from the local XAMPP defaults. Run the following commands once for initial setup.
+1. Start MySQL in XAMPP. To use phpMyAdmin, also start Apache and open <http://localhost/phpmyadmin/>. Create a database named `taskflow` with the `utf8mb4_unicode_ci` collation.
+2. Open a terminal in the project folder. Install dependencies and create your local environment file. The second command copies the template only if `.env` is missing.
 
    ```sh
-   composer setup
-   php artisan serve
+   composer install
+   php -r "file_exists('.env') || copy('.env.example', '.env');"
    ```
 
-4. Open <http://127.0.0.1:8000>. Register an account or sign in with the imported demo account. On an empty installation, you can add the demo with `php artisan db:seed` once.
+3. In `.env`, set `DB_CONNECTION=mysql`, `DB_HOST=127.0.0.1`, `DB_PORT=3306`, and `DB_DATABASE=taskflow`. Set `DB_USERNAME` and `DB_PASSWORD` to your local MySQL credentials. The template uses the default local XAMPP account. Run `php artisan key:generate` once if `APP_KEY` is blank.
+4. For a blank app, run `php artisan migrate`. To start with sample tasks, use **Import** in phpMyAdmin to load `database.sql` into the empty **taskflow** database. The import includes the migrations and sample data. For sample tasks on an already migrated, empty installation, run `php artisan db:seed` once.
+5. Run `php artisan serve` and open <http://127.0.0.1:8000>. Register an account or sign in with the local demo account.
 
-The demo username is `demo`, the email is `demo@taskflow.test`, and the phone is `+15550000001`. The password is `password`. The SQL export contains the schema, migration history, and sample data. Import it into an empty database.
+The local demo username is `demo`, the email is `demo@taskflow.test`, and the phone is `+15550000001`. The password is `password`. Use this account for local testing.
 
 ## Dashboard design
 
@@ -42,7 +45,3 @@ composer test
 ```
 
 The tests use the local MySQL connection settings from `.env`. To use different credentials for tests, set them in a local `.env.testing` and provide an application key there. PHPUnit selects `taskflow_test`.
-
-## Project proposal
-
-Open `proposal.docx` for the scope, design diagrams, working tree, three-week schedule, and evaluation criteria.
